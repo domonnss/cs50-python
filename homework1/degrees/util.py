@@ -1,19 +1,16 @@
-class Node():
-    def __init__(self, state, parent, action):
-        self.state = state
+class Node:
+    def __init__(self, parent, self_id, movie_id):
         self.parent = parent
-        self.action = action
+        self.self_id = self_id
+        self.movie_id = movie_id
 
 
-class StackFrontier():
+class StackFrontier:
     def __init__(self):
         self.frontier = []
 
     def add(self, node):
         self.frontier.append(node)
-
-    def contains_state(self, state):
-        return any(node.state == state for node in self.frontier)
 
     def empty(self):
         return len(self.frontier) == 0
