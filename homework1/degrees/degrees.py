@@ -90,10 +90,51 @@ def shortest_path(source, target):
     that connect the source to the target.
 
     If no possible path, returns None.
-    """
 
-    # TODO
-    raise NotImplementedError
+    INPUT:
+    source source person id
+    target target person id
+    OUTPUT:
+    path list containing tuples or NONE
+    ALGORITHM:
+    BFS
+    """
+    # init
+    path = None
+    frontier = QueueFrontier()
+    node_explored = set()
+    start = Node(parent=None, self_id=source, movie_id=None)
+    end = None
+    frontier.add(start)
+    # BFS loop
+    while not frontier.empty():
+        node = frontier.remove()
+        node_explored.add(node.self_id)
+        neighbors = neighbors_for_person(node.self_id)
+        for movie_id, person_id in neighbors:
+            # avoid self-looping
+            # such as tom cruise to tom cruise by movie Rain Man
+            if not node.movie_id == movie_id:
+                temp_node = Node(parent=node, self_id=person_id, movie_id=movie_id)
+                # except some node which has been explored
+                if temp_node.self_id not in node_explored:
+                    frontier.add(temp_node)
+                # get the target node
+                if temp_node.self_id == target:
+                    end = temp_node
+    path = []
+    # if connected
+    if not end == None:
+        node = end
+        while not node.parent == None:
+            path.append((node.movie_id, node.self_id))
+            node = node.parent
+        path.reverse()
+    # if not connected
+    elif end == None and frontier.empty():
+        path = None
+    print(path)
+    return path
 
 
 def person_id_for_name(name):
